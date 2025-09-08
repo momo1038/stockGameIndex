@@ -64,7 +64,7 @@ stockGameIndex/
 4. 设置适当的缓存策略
 
 ## 游戏下载
-访问 [TapTap下载页面](https://www.taptap.cn/app/715375?utm_medium=rep&utm_source=rep_hbrjnvtkovk&os=android)
+访问 [TapTap下载页面](https://l.taptap.cn/4BCjUn2i?channel=rep-rep_hbrjnvtkovk)
 
 ## 版权声明
 © 2024 真实炒股. 保留所有权利。

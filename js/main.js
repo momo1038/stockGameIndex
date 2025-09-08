@@ -314,21 +314,71 @@ function throttle(func, limit) {
     };
 }
 
+// 移动端菜单功能
+function initMobileMenu() {
+    const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    
+    if (!mobileMenuToggle || !navLinks) {
+        console.log('移动端菜单元素未找到');
+        return;
+    }
+    
+    console.log('初始化移动端菜单');
+    
+    // 创建关闭按钮（如果不存在）
+    let closeButton = navLinks.querySelector('.mobile-menu-close');
+    if (!closeButton) {
+        closeButton = document.createElement('div');
+        closeButton.className = 'mobile-menu-close';
+        closeButton.innerHTML = '<i class="fas fa-times"></i>';
+        navLinks.appendChild(closeButton);
+    }
+    
+    // 切换菜单
+    function toggleMenu(e) {
+        e.stopPropagation();
+        console.log('切换菜单状态');
+        navLinks.classList.toggle('active');
+        document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
+    }
+    
+    // 确保事件监听器只添加一次
+    mobileMenuToggle.removeEventListener('click', toggleMenu);
+    closeButton.removeEventListener('click', toggleMenu);
+    
+    mobileMenuToggle.addEventListener('click', toggleMenu);
+    closeButton.addEventListener('click', toggleMenu);
+    
+    // 点击菜单项后关闭菜单
+    navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+            navLinks.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+    });
+    
+    // 点击菜单外部关闭菜单
+    document.addEventListener('click', (e) => {
+        if (!navLinks.contains(e.target) && !mobileMenuToggle.contains(e.target)) {
+            navLinks.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    });
+}
+
 // 初始化所有功能
 document.addEventListener('DOMContentLoaded', () => {
     initLoadingAnimation();
-    
-    // 延迟初始化以确保页面完全加载
-    setTimeout(() => {
-        createParticles();
-        animateNumbers();
-        initStockChart();
-        initParallax();
-        initNavbarScroll();
-        initSmoothScroll();
-        initMouseFollow();
-        initVisibilityAPI();
-    }, 100);
+    createParticles();
+    animateNumbers();
+    initStockChart();
+    initParallax();
+    initNavbarScroll();
+    initSmoothScroll();
+    initMouseFollow();
+    initVisibilityAPI();
+    initMobileMenu();
 });
 
 // 错误处理
