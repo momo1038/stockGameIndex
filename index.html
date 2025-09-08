@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>真实炒股 - 体验真正的市场博弈</title>
+    <meta name="description" content="还在玩枯燥的股票模拟盘？来《真实炒股》，体验真正的市场博弈！你的每一笔交易都将直接影响股价走势，成为市场的造物主！">
+    <meta name="keywords" content="真实炒股,股票游戏,金融博弈,炒股手游,股票模拟">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="真实炒股 - 体验真正的市场博弈">
+    <meta property="og:description" content="你的每一笔交易都将直接影响股价走势，成为市场的造物主！">
+    <meta property="og:image" content="./assets/og-image.jpg">
+    <meta property="og:url" content="https://realstockgame.com">
+    
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+SC:wght@300;400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- 背景动画 -->
+    <div class="bg-animation">
+        <div class="particles"></div>
+        <div class="grid-overlay"></div>
+    </div>
+
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-chart-line"></i>
+                <span>真实炒股</span>
+            </div>
+            <div class="nav-links">
+                <a href="#hero">首页</a>
+                <a href="#features">特色</a>
+                <a href="#gameplay">玩法</a>
+                <a href="https://l.taptap.cn/4BCjUn2i?channel=rep-rep_hbrjnvtkovk" target="_blank">下载</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 英雄区域 -->
+    <section id="hero" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <span class="gradient-text">还在玩枯燥的股票模拟盘？</span>
+                    <br>
+                    <span class="highlight">来体验真正的市场博弈！</span>
+                </h1>
+                <p class="hero-description">
+                    这里不是冷冰冰的数据演练，而是一个由所有玩家共同塑造的真实金融战场
+                    <br>你的每一笔交易、每一次操作，都将直接影响股价走势，甚至左右整个市场的风向！
+                </p>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-number" data-online="online-players">0</div>
+                        <div class="stat-label">在线玩家</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number" data-trading="daily-trading">0</div>
+                        <div class="stat-label">日交易量(亿)</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number" data-downloads="download-count">0</div>
+                        <div class="stat-label">下载量</div>
+                    </div>
+                </div>
+                <a href="https://l.taptap.cn/4BCjUn2i?channel=rep-rep_hbrjnvtkovk" 
+                   class="cta-button" target="_blank">
+                    <span>TapTap下载</span>
+                    <i class="fas fa-download"></i>
+                </a>
+            </div>
+            <div class="hero-visual">
+                <div class="phone-mockup">
+                    <div class="phone-screen">
+                        <div class="stock-chart">
+                            <canvas id="heroChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 特色功能 -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title">
+                <span class="gradient-text">🔥 核心特色</span>
+            </h2>
+            <div class="features-grid">
+                <div class="feature-card" data-aos="fade-up">
+                    <div class="feature-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3>真实市场影响</h3>
+                    <p>你的资金就是力量！买入拉升股价，抛售引发震荡，你的决策直接改变K线走势，这是模拟盘永远无法做到的"实盘操控感"！</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>动态玩家博弈</h3>
+                    <p>与全球玩家同台竞技，洞察对手策略，争夺龙虎榜排名，用智慧收割利润，用心理战击溃对手！</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-icon">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <h3>完整金融生态</h3>
+                    <p>从买卖股票、股息分红到发行新股（成为上市公司老板！），甚至通过挖矿获取钻石，体验资本世界的每一个环节。</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>零风险暴富梦</h3>
+                    <p>虚拟股票、真实刺激！无需担心现实亏损，却能享受碾压散户、做庄控盘的快感！</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 游戏玩法 -->
+    <section id="gameplay" class="gameplay">
+        <div class="container">
+            <h2 class="section-title">
+                <span class="gradient-text">📈 在这里，你不是数据的旁观者，而是市场的造物主！</span>
+            </h2>
+            <div class="gameplay-content">
+                <div class="gameplay-item">
+                    <div class="gameplay-icon">
+                        <i class="fas fa-chart-candlestick"></i>
+                    </div>
+                    <h3>实时K线操控</h3>
+                    <p>每一笔交易都会实时反映在K线图上，你的资金流动就是市场的心跳</p>
+                </div>
+                <div class="gameplay-item">
+                    <div class="gameplay-icon">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <h3>龙虎榜争霸</h3>
+                    <p>登顶财富排行榜，成为万人敬仰的"金融巨鳄"</p>
+                </div>
+                <div class="gameplay-item">
+                    <div class="gameplay-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <h3>IPO发行上市</h3>
+                    <p>从散户到上市公司老板，发行自己的股票让其他玩家投资</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 用户评价 -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="testimonial-card">
+                <blockquote>
+                    "模拟盘的钱只是数字，而这里的每一分钱都是一颗子弹！"
+                </blockquote>
+                <cite>— 某华尔街大佬评论</cite>
+            </div>
+        </div>
+    </section>
+
+    <!-- 下载区域 -->
+    <section id="download" class="download">
+        <div class="container">
+            <h2 class="section-title">
+                <span class="gradient-text">K线由你画，财富由你定！</span>
+            </h2>
+            <div class="download-content">
+                <p class="disclaimer">
+                    所有股票均为虚拟设定，但涨跌由玩家真金白银的交易驱动——这才是"真实"的含义！
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 真实炒股. 虚拟股票，真实博弈</p>
+        </div>
+    </footer>
+
+    <!-- AOS动画库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script src="./js/main.js"></script>
+</body>
+</html>
