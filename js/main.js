@@ -68,93 +68,151 @@ function animateNumbers() {
     }, 2000);
 }
 
-// 股票图表动画
+// 股票图表动画 - K线图版本
 function initStockChart() {
     const canvas = document.getElementById('heroChart');
     if (!canvas) return;
     
     const ctx = canvas.getContext('2d');
-    canvas.width = 280;
-    canvas.height = 200;
+    canvas.width = 260;
+    canvas.height = 110;
     
-    // 生成模拟股票数据
-    const generateData = () => {
+    // 生成K线数据 (开盘, 收盘, 最高, 最低)
+    const generateKLineData = () => {
         const data = [];
-        let price = 100;
-        for (let i = 0; i < 50; i++) {
-            price += (Math.random() - 0.5) * 5;
-            data.push(price);
+        let basePrice = 100;
+        
+        for (let i = 0; i < 30; i++) {
+            const volatility = 2 + Math.random() * 3;
+            const trend = (Math.random() - 0.5) * 1;
+            
+            const open = basePrice + (Math.random() - 0.5) * 2;
+            const close = open + (Math.random() - 0.5) * volatility + trend;
+            const high = Math.max(open, close) + Math.random() * volatility;
+            const low = Math.min(open, close) - Math.random() * volatility;
+            
+            data.push({
+                open: Math.max(50, Math.min(150, open)),
+                close: Math.max(50, Math.min(150, close)),
+                high: Math.max(50, Math.min(150, high)),
+                low: Math.max(50, Math.min(150, low))
+            });
+            
+            basePrice = close;
         }
         return data;
     };
     
-    const data = generateData();
-    const maxPrice = Math.max(...data);
-    const minPrice = Math.min(...data);
-    const priceRange = maxPrice - minPrice;
+    let kLineData = generateKLineData();
     
-    function drawChart() {
+    // 计算价格范围
+    const allPrices = kLineData.flatMap(d => [d.high, d.low]);
+    const maxPrice = Math.max(...allPrices);
+    const minPrice = Math.min(...allPrices);
+    const priceRange = maxPrice - minPrice;
+    const padding = priceRange * 0.1;
+    
+    const chartTop = 5;
+    const chartBottom = canvas.height - 5;
+    const chartHeight = chartBottom - chartTop;
+    
+    function drawKLineChart() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         
-        // 绘制网格
+        // 绘制网格背景
         ctx.strokeStyle = 'rgba(0, 212, 255, 0.1)';
         ctx.lineWidth = 1;
-        for (let i = 0; i <= 10; i++) {
-            const y = (i / 10) * canvas.height;
+        
+        // 水平网格线
+        for (let i = 0; i <= 5; i++) {
+            const y = chartTop + (i / 5) * chartHeight;
             ctx.beginPath();
             ctx.moveTo(0, y);
             ctx.lineTo(canvas.width, y);
             ctx.stroke();
         }
         
-        // 绘制K线
-        ctx.strokeStyle = '#00d4ff';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
+        // 垂直网格线
+        for (let i = 0; i <= kLineData.length; i += 5) {
+            const x = (i / (kLineData.length - 1)) * canvas.width;
+            ctx.beginPath();
+            ctx.moveTo(x, chartTop);
+            ctx.lineTo(x, chartBottom);
+            ctx.stroke();
+        }
         
-        data.forEach((price, index) => {
-            const x = (index / (data.length - 1)) * canvas.width;
-            const y = canvas.height - ((price - minPrice) / priceRange) * canvas.height;
+        // 绘制K线
+        const candleWidth = Math.max(1, (canvas.width / kLineData.length) * 0.6);
+        const candleSpacing = canvas.width / kLineData.length;
+        
+        kLineData.forEach((candle, index) => {
+            const x = index * candleSpacing + candleSpacing / 2;
             
-            if (index === 0) {
-                ctx.moveTo(x, y);
+            // 将价格转换为y坐标
+            const yHigh = chartBottom - ((candle.high - minPrice + padding) / (priceRange + 2 * padding)) * chartHeight;
+            const yLow = chartBottom - ((candle.low - minPrice + padding) / (priceRange + 2 * padding)) * chartHeight;
+            const yOpen = chartBottom - ((candle.open - minPrice + padding) / (priceRange + 2 * padding)) * chartHeight;
+            const yClose = chartBottom - ((candle.close - minPrice + padding) / (priceRange + 2 * padding)) * chartHeight;
+            
+            // 判断涨跌
+            const isRising = candle.close >= candle.open;
+            const color = isRising ? '#00ff88' : '#ff006e';
+            
+            // 绘制上下影线
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(x, yHigh);
+            ctx.lineTo(x, yLow);
+            ctx.stroke();
+            
+            // 绘制实体
+            ctx.fillStyle = color;
+            const bodyTop = Math.min(yOpen, yClose);
+            const bodyHeight = Math.abs(yOpen - yClose);
+            
+            if (bodyHeight < 1) {
+                // 如果实体太小，画一条线
+                ctx.fillRect(x - candleWidth/2, bodyTop, candleWidth, 1);
             } else {
-                ctx.lineTo(x, y);
+                ctx.fillRect(x - candleWidth/2, bodyTop, candleWidth, bodyHeight);
             }
         });
         
-        ctx.stroke();
-        
-        // 绘制渐变填充
-        const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-        gradient.addColorStop(0, 'rgba(0, 212, 255, 0.3)');
-        gradient.addColorStop(1, 'rgba(0, 212, 255, 0.05)');
-        
-        ctx.fillStyle = gradient;
-        ctx.beginPath();
-        ctx.moveTo(0, canvas.height);
-        
-        data.forEach((price, index) => {
-            const x = (index / (data.length - 1)) * canvas.width;
-            const y = canvas.height - ((price - minPrice) / priceRange) * canvas.height;
-            ctx.lineTo(x, y);
-        });
-        
-        ctx.lineTo(canvas.width, canvas.height);
-        ctx.closePath();
-        ctx.fill();
+        // 绘制价格标签
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+        ctx.font = '10px Arial';
+        ctx.textAlign = 'right';
+        ctx.fillText(maxPrice.toFixed(1), canvas.width - 5, chartTop + 10);
+        ctx.fillText(minPrice.toFixed(1), canvas.width - 5, chartBottom - 5);
     }
     
-    drawChart();
+    drawKLineChart();
     
-    // 实时更新图表
+    // 实时更新图表 - 添加新K线
     setInterval(() => {
-        data.shift();
-        const lastPrice = data[data.length - 1];
-        const newPrice = lastPrice + (Math.random() - 0.5) * 3;
-        data.push(newPrice);
-        drawChart();
-    }, 2000);
+        // 移除最旧的K线
+        kLineData.shift();
+        
+        // 添加新的K线
+        const lastCandle = kLineData[kLineData.length - 1];
+        const volatility = 2 + Math.random() * 3;
+        const trend = (Math.random() - 0.5) * 1;
+        
+        const open = lastCandle.close + (Math.random() - 0.5) * 1;
+        const close = open + (Math.random() - 0.5) * volatility + trend;
+        const high = Math.max(open, close) + Math.random() * volatility;
+        const low = Math.min(open, close) - Math.random() * volatility;
+        
+        kLineData.push({
+            open: Math.max(50, Math.min(150, open)),
+            close: Math.max(50, Math.min(150, close)),
+            high: Math.max(50, Math.min(150, high)),
+            low: Math.max(50, Math.min(150, low))
+        });
+        
+        drawKLineChart();
+    }, 3000);
 }
 
 // 滚动视差效果

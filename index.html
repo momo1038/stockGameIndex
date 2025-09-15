@@ -79,8 +79,128 @@
             <div class="hero-visual">
                 <div class="phone-mockup">
                     <div class="phone-screen">
-                        <div class="stock-chart">
-                            <canvas id="heroChart"></canvas>
+                        <div class="stock-trading-app">
+                            <!-- 股票头部信息 -->
+                            <div class="stock-header">
+                                <div class="stock-name">
+                                    <span class="stock-code">真实炒股</span>
+                                    <span class="stock-price">¥127.45</span>
+                                    <span class="stock-change positive">+2.34%</span>
+                                </div>
+                                <div class="stock-info">
+                                    <div class="info-item">
+                                        <span class="label">开盘</span>
+                                        <span class="value">125.20</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="label">昨收</span>
+                                        <span class="value">124.53</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="label">最高</span>
+                                        <span class="value">128.90</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="label">最低</span>
+                                        <span class="value">124.10</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- K线图区域 -->
+                            <div class="chart-container">
+                                <canvas id="heroChart"></canvas>
+                            </div>
+                            
+                            <!-- 技术指标 -->
+                            <div class="technical-indicators">
+                                <div class="indicator">
+                                    <span class="label">换手率</span>
+                                    <span class="value">8.45%</span>
+                                </div>
+                                <div class="indicator">
+                                    <span class="label">量比</span>
+                                    <span class="value">1.23</span>
+                                </div>
+                                <div class="indicator">
+                                    <span class="label">振幅</span>
+                                    <span class="value">3.85%</span>
+                                </div>
+                            </div>
+                            
+                            <!-- 筹码峰图 -->
+                            <div class="chip-peak">
+                                <div class="chip-title">筹码分布</div>
+                                <div class="chip-chart">
+                                    <div class="chip-bar" style="height: 30%;"></div>
+                                    <div class="chip-bar" style="height: 60%;"></div>
+                                    <div class="chip-bar" style="height: 80%;"></div>
+                                    <div class="chip-bar" style="height: 45%;"></div>
+                                    <div class="chip-bar" style="height: 25%;"></div>
+                                </div>
+                                <div class="chip-price">成本区间: ¥120-135</div>
+                            </div>
+                            
+                            <!-- 五档盘口 -->
+                            <div class="order-book">
+                                <div class="order-title">五档盘口</div>
+                                <div class="sell-orders">
+                                    <div class="order-item">
+                                        <span class="price">¥128.90</span>
+                                        <span class="volume">2.3万手</span>
+                                    </div>
+                                    <div class="order-item">
+                                        <span class="price">¥128.75</span>
+                                        <span class="volume">1.8万手</span>
+                                    </div>
+                                    <div class="order-item">
+                                        <span class="price">¥128.60</span>
+                                        <span class="volume">3.2万手</span>
+                                    </div>
+                                    <div class="order-item">
+                                        <span class="price">¥128.45</span>
+                                        <span class="volume">1.5万手</span>
+                                    </div>
+                                    <div class="order-item">
+                                        <span class="price">¥128.30</span>
+                                        <span class="volume">2.7万手</span>
+                                    </div>
+                                </div>
+                                <div class="buy-orders">
+                                    <div class="order-item">
+                                        <span class="price">¥127.30</span>
+                                        <span class="volume">3.1万手</span>
+                                    </div>
+                                    <div class="order-item">
+                                        <span class="price">¥127.15</span>
+                                        <span class="volume">2.4万手</span>
+                                    </div>
+                                    <div class="order-item">
+                                        <span class="price">¥127.00</span>
+                                        <span class="volume">1.9万手</span>
+                                    </div>
+                                    <div class="order-item">
+                                        <span class="price">¥126.85</span>
+                                        <span class="volume">3.6万手</span>
+                                    </div>
+                                    <div class="order-item">
+                                        <span class="price">¥126.70</span>
+                                        <span class="volume">2.8万手</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 交易按钮 -->
+                            <div class="trading-buttons">
+                                <button class="btn-buy">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span>买入</span>
+                                </button>
+                                <button class="btn-sell">
+                                    <i class="fas fa-arrow-down"></i>
+                                    <span>卖出</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
