@@ -5,28 +5,89 @@ AOS.init({
     offset: 100
 });
 
-// 创建自定义粒子效果
+// 创建增强粒子背景
 function createParticles() {
     const particlesContainer = document.querySelector('.particles');
-    const particleCount = 50;
-    
+    if (!particlesContainer) return;
+
+    // 创建更高级的粒子效果
+    const particleCount = 80;
+    const particles = [];
+
     for (let i = 0; i < particleCount; i++) {
         const particle = document.createElement('div');
         particle.className = 'particle';
+        
+        const size = Math.random() * 4 + 1;
+        const x = Math.random() * window.innerWidth;
+        const y = Math.random() * window.innerHeight;
+        const duration = Math.random() * 20 + 10;
+        const delay = Math.random() * 5;
+        
         particle.style.cssText = `
             position: absolute;
-            width: ${Math.random() * 3 + 1}px;
-            height: ${Math.random() * 3 + 1}px;
-            background: ${['#00d4ff', '#ff006e', '#ffbe0b'][Math.floor(Math.random() * 3)]};
+            width: ${size}px;
+            height: ${size}px;
+            background: ${Math.random() > 0.5 ? '#00D4FF' : '#FFBE0B'};
             border-radius: 50%;
+            left: ${x}px;
+            top: ${y}px;
+            animation: float ${duration}s ${delay}s infinite linear;
+            box-shadow: 0 0 ${size * 2}px ${Math.random() > 0.5 ? '#00D4FF' : '#FFBE0B'};
             opacity: ${Math.random() * 0.5 + 0.3};
-            left: ${Math.random() * 100}%;
-            top: ${Math.random() * 100}%;
-            animation: float ${Math.random() * 10 + 10}s linear infinite;
         `;
         
         particlesContainer.appendChild(particle);
+        particles.push(particle);
     }
+
+    // 添加连接线效果
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.style.position = 'fixed';
+    canvas.style.top = '0';
+    canvas.style.left = '0';
+    canvas.style.pointerEvents = 'none';
+    canvas.style.zIndex = '1';
+    document.body.appendChild(canvas);
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    function drawConnections() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        for (let i = 0; i < particles.length; i++) {
+            for (let j = i + 1; j < particles.length; j++) {
+                const p1 = particles[i];
+                const p2 = particles[j];
+                
+                const x1 = parseFloat(p1.style.left);
+                const y1 = parseFloat(p1.style.top);
+                const x2 = parseFloat(p2.style.left);
+                const y2 = parseFloat(p2.style.top);
+                
+                const distance = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
+                
+                if (distance < 150) {
+                    ctx.beginPath();
+                    ctx.strokeStyle = `rgba(0, 212, 255, ${0.3 * (1 - distance / 150)})`;
+                    ctx.lineWidth = 0.5;
+                    ctx.moveTo(x1, y1);
+                    ctx.lineTo(x2, y2);
+                    ctx.stroke();
+                }
+            }
+        }
+        
+        requestAnimationFrame(drawConnections);
+    }
+    
+    drawConnections();
 }
 
 // 动态数字更新
@@ -44,8 +105,8 @@ function animateNumbers() {
     const downloadCountEl = document.querySelector('[data-downloads="download-count"]');
     
     // 初始显示
-    if (onlinePlayersEl) onlinePlayersEl.textContent = onlinePlayers;
-    if (dailyTradingEl) dailyTradingEl.textContent = dailyTrading;
+    if (onlinePlayersEl) onlinePlayersEl.textContent = onlinePlayers.toLocaleString();
+    if (dailyTradingEl) dailyTradingEl.textContent = dailyTrading + '亿';
     if (downloadCountEl) downloadCountEl.textContent = downloadCount.toLocaleString();
     
     // 每秒更新
@@ -53,22 +114,22 @@ function animateNumbers() {
         // 在线玩家随机±1~10
         onlinePlayers += Math.floor(Math.random() * 20) - 10;
         onlinePlayers = Math.max(1200, Math.min(4000, onlinePlayers));
-        if (onlinePlayersEl) onlinePlayersEl.textContent = onlinePlayers;
+        if (onlinePlayersEl) onlinePlayersEl.textContent = onlinePlayers.toLocaleString();
         
         // 日交易量随机增加0.01~0.02亿
         const increment = (Math.random() * 0.01 + 0.01).toFixed(2);
         dailyTrading = (parseFloat(dailyTrading) + parseFloat(increment)).toFixed(2);
         dailyTrading = Math.min(89.51, parseFloat(dailyTrading)).toFixed(2);
-        if (dailyTradingEl) dailyTradingEl.textContent = dailyTrading+'亿';
+        if (dailyTradingEl) dailyTradingEl.textContent = dailyTrading + '亿';
         
         // 下载量随机增加1~50
-        // downloadCount += Math.floor(Math.random() * 50) + 1;
+        // downloadCount += Math.floor(Math.random() * 1) + 1;
         // downloadCount = Math.min(250000, downloadCount);
         // if (downloadCountEl) downloadCountEl.textContent = downloadCount.toLocaleString();
     }, 2000);
 }
 
-// 股票图表动画 - K线图版本
+// 增强版股票图表动画
 function initStockChart() {
     const canvas = document.getElementById('heroChart');
     if (!canvas) return;
@@ -119,6 +180,13 @@ function initStockChart() {
     function drawKLineChart() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         
+        // 创建渐变背景
+        const gradient = ctx.createLinearGradient(0, chartTop, 0, chartBottom);
+        gradient.addColorStop(0, 'rgba(0, 212, 255, 0.05)');
+        gradient.addColorStop(1, 'rgba(0, 212, 255, 0.01)');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, chartTop, canvas.width, chartHeight);
+        
         // 绘制网格背景
         ctx.strokeStyle = 'rgba(0, 212, 255, 0.1)';
         ctx.lineWidth = 1;
@@ -167,9 +235,20 @@ function initStockChart() {
             ctx.stroke();
             
             // 绘制实体
-            ctx.fillStyle = color;
             const bodyTop = Math.min(yOpen, yClose);
             const bodyHeight = Math.abs(yOpen - yClose);
+            
+            // 添加渐变效果
+            const bodyGradient = ctx.createLinearGradient(x - candleWidth/2, bodyTop, x + candleWidth/2, bodyTop + bodyHeight);
+            if (isRising) {
+                bodyGradient.addColorStop(0, '#00ff88');
+                bodyGradient.addColorStop(1, '#00d9c5');
+            } else {
+                bodyGradient.addColorStop(0, '#ff006e');
+                bodyGradient.addColorStop(1, '#ff4757');
+            }
+            
+            ctx.fillStyle = bodyGradient;
             
             if (bodyHeight < 1) {
                 // 如果实体太小，画一条线
@@ -177,11 +256,17 @@ function initStockChart() {
             } else {
                 ctx.fillRect(x - candleWidth/2, bodyTop, candleWidth, bodyHeight);
             }
+            
+            // 添加发光效果
+            ctx.shadowColor = color;
+            ctx.shadowBlur = 5;
+            ctx.fillRect(x - candleWidth/2, bodyTop, candleWidth, bodyHeight);
+            ctx.shadowBlur = 0;
         });
         
         // 绘制价格标签
         ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-        ctx.font = '10px Arial';
+        ctx.font = '10px Orbitron';
         ctx.textAlign = 'right';
         ctx.fillText(maxPrice.toFixed(1), canvas.width - 5, chartTop + 10);
         ctx.fillText(minPrice.toFixed(1), canvas.width - 5, chartBottom - 5);
@@ -212,7 +297,7 @@ function initStockChart() {
         });
         
         drawKLineChart();
-    }, 3000);
+    }, 2000); // 改为2秒更新一次，更流畅
 }
 
 // 滚动视差效果
@@ -437,6 +522,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initMouseFollow();
     initVisibilityAPI();
     initMobileMenu();
+    initAdvancedInteractions(); // 添加高级交互动画
 });
 
 // 错误处理
@@ -449,3 +535,132 @@ window.addEventListener('load', () => {
     const loadTime = performance.now();
     console.log(`页面加载完成，耗时: ${loadTime.toFixed(2)}ms`);
 });
+
+// 添加高级交互动画效果
+function initAdvancedInteractions() {
+    // 为所有按钮添加高级悬停效果
+    const buttons = document.querySelectorAll('.cta-button, .download-button, .btn-buy, .btn-sell');
+    
+    buttons.forEach(button => {
+        button.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-5px) scale(1.05)';
+            this.style.boxShadow = '0 15px 40px rgba(0, 217, 197, 0.6)';
+            this.style.transition = 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+        });
+        
+        button.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0) scale(1)';
+            this.style.boxShadow = '';
+        });
+        
+        // 添加点击波纹效果
+        button.addEventListener('click', function(e) {
+            const ripple = document.createElement('span');
+            const rect = this.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = e.clientX - rect.left - size / 2;
+            const y = e.clientY - rect.top - size / 2;
+            
+            ripple.style.cssText = `
+                position: absolute;
+                width: ${size}px;
+                height: ${size}px;
+                left: ${x}px;
+                top: ${y}px;
+                background: rgba(255, 255, 255, 0.3);
+                border-radius: 50%;
+                transform: scale(0);
+                animation: ripple 0.6s ease-out;
+                pointer-events: none;
+            `;
+            
+            this.style.position = 'relative';
+            this.style.overflow = 'hidden';
+            this.appendChild(ripple);
+            
+            setTimeout(() => ripple.remove(), 600);
+        });
+    });
+    
+    // 为卡片添加3D悬停效果
+    const cards = document.querySelectorAll('.feature-card, .gameplay-item');
+    
+    cards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-10px) rotateX(5deg)';
+            this.style.transition = 'all 0.3s ease';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0) rotateX(0deg)';
+        });
+    });
+    
+    // 添加滚动视差增强效果
+    const parallaxElements = document.querySelectorAll('[data-parallax]');
+    
+    window.addEventListener('scroll', () => {
+        const scrolled = window.pageYOffset;
+        
+        parallaxElements.forEach(element => {
+            const speed = parseFloat(element.dataset.parallax) || 0.5;
+            const direction = element.dataset.direction || 'vertical';
+            
+            if (direction === 'horizontal') {
+                const xPos = scrolled * speed;
+                element.style.transform = `translateX(${xPos}px)`;
+            } else {
+                const yPos = -(scrolled * speed);
+                element.style.transform = `translateY(${yPos}px)`;
+            }
+        });
+    });
+    
+    // 添加数字滚动动画增强版
+    const animatedNumbers = document.querySelectorAll('[data-animate-number]');
+    
+    const observerOptions = {
+        threshold: 0.5,
+        rootMargin: '0px 0px -100px 0px'
+    };
+    
+    const numberObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const target = entry.target;
+                const finalNumber = parseInt(target.dataset.animateNumber);
+                const duration = parseInt(target.dataset.duration) || 2000;
+                
+                animateNumber(target, 0, finalNumber, duration);
+                numberObserver.unobserve(target);
+            }
+        });
+    }, observerOptions);
+    
+    animatedNumbers.forEach(number => {
+        numberObserver.observe(number);
+    });
+}
+
+// 增强版数字动画
+function animateNumber(element, start, end, duration) {
+    const startTime = performance.now();
+    const range = end - start;
+    
+    function updateNumber(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        
+        // 使用缓动函数
+        const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+        const current = Math.floor(start + range * easeOutQuart);
+        
+        element.textContent = current.toLocaleString();
+        
+        if (progress < 1) {
+            requestAnimationFrame(updateNumber);
+        }
+    }
+    
+    requestAnimationFrame(updateNumber);
+}
